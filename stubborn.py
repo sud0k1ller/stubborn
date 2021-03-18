@@ -166,12 +166,30 @@ def use_command(prompt_win, side_win, selected_module_number, modules_properties
     print_contextual_help(side_win, "module", selected_module_number, modules_properties_list)
     clear_prompt_output(prompt_win)
 
-
 def invalid_command(prompt_win, side_win, selected_module_number, modules_properties_list):
     clear_prompt_output(prompt_win)
     print_contextual_help(side_win, "invalid", selected_module_number, modules_properties_list)
     prompt_win.addstr(4, 3, "Invalid command")
     prompt_win.refresh()
+
+def help_command(side_win, prompt_win, selected_module_number, modules_properties_list):
+    print_contextual_help(side_win, "generic_help", selected_module_number, modules_properties_list)
+    clear_prompt_output(prompt_win)
+    print_generic_help(prompt_win)
+
+def list_command(side_win, prompt_win, selected_module_number, modules_properties_list):
+    print_contextual_help(side_win, "list_modules", selected_module_number, modules_properties_list)
+    clear_prompt_output(prompt_win)
+    print_modules_list(prompt_win, modules_properties_list)
+
+def options_command(prompt_win, side_win, selected_module_number, modules_properties_list):
+    pass
+
+def info_command(prompt_win, side_win, selected_module_number, modules_properties_list):
+    pass
+
+def set_command(prompt_win, side_win, selected_module_number, modules_properties_list):
+    pass
 
 def handle_prompt_input(prompt_win, modules_properties_list):
     selected_module_number = 0
@@ -184,13 +202,9 @@ def handle_prompt_input(prompt_win, modules_properties_list):
         if command == 'exit':
             exit_script()
         elif command == 'help':
-            print_contextual_help(side_win, "generic_help", selected_module_number, modules_properties_list)
-            clear_prompt_output(prompt_win)
-            print_generic_help(prompt_win)
+            help_command(side_win, prompt_win, selected_module_number, modules_properties_list)
         elif command == 'list':
-            print_contextual_help(side_win, "list_modules", selected_module_number, modules_properties_list)
-            clear_prompt_output(prompt_win)
-            print_modules_list(prompt_win, modules_properties_list)
+            list_command(side_win, prompt_win, selected_module_number, modules_properties_list)
         elif 'use ' in command:
             if len(command.split()) == 2 and 0 < int(command.split()[1]) <= len(modules_properties_list):
                 selected_module_number = int(command.split()[1])
@@ -204,6 +218,13 @@ def handle_prompt_input(prompt_win, modules_properties_list):
             else:
                 print_contextual_help(side_win, "module", selected_module_number, modules_properties_list)
                 clear_prompt_output(prompt_win)
+                if command == "options":
+                    options_command(prompt_win, side_win, selected_module_number, modules_properties_list)
+                elif command == "info":
+                    info_command(prompt_win, side_win, selected_module_number, modules_properties_list)
+                elif 'set ' in command:
+                    set_command(prompt_win, side_win, selected_module_number, modules_properties_list)
+
         elif command == 'execute':
             print_contextual_help(side_win, "execute", selected_module_number, modules_properties_list)
             clear_prompt_output(prompt_win)
@@ -225,4 +246,5 @@ stdscr = init_screen()
 header_win, prompt_win, side_win, footer_win = define_windows()
 print_initial_screen(stdscr, header_win, prompt_win, side_win, footer_win, modules_properties_list)
 
+# ===== MAIN FUNCTIONAL FUNCTION =====
 handle_prompt_input(prompt_win, modules_properties_list)
