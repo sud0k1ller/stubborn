@@ -1,0 +1,188 @@
+#!/bin/python3
+
+import curses
+
+def import_modules():
+    #TODO
+    print("Modules will be imported from 'modules' directory here")
+    #return modules list
+    pass
+
+def print_title():
+    pass
+
+def print_modules():
+    #TODO
+    pass
+
+def print_generic_help(prompt_win):
+    prompt_win.addstr(4, 3, "Help")
+    prompt_win.addstr(6, 3, "Stubborn is simple post-exploitation persistency automation tool.") 
+    prompt_win.addstr(7, 3, "It is not and was not meant to be rocket science.")
+    prompt_win.addstr(9, 3, "Your path with this script is very simple:")
+    prompt_win.addstr(11, 10, "Step 1. Choose module")
+    prompt_win.addstr(12, 15 ,"[+] Use 'list' command to get list of all available modules.")
+    prompt_win.addstr(13, 15 ,"[+] Use 'use <module_number>' command to select module.")
+    prompt_win.addstr(15, 10, "Step 2. Set options")
+    prompt_win.addstr(16, 15 ,"[+] Use 'options' to list all module options.")
+    prompt_win.addstr(17, 15 ,"[+] Use 'set <option_name> <option_value>' command to set options for selected module.")
+    prompt_win.addstr(18, 15, "[+] Use 'info' command to get detailed info about selected module")
+    prompt_win.addstr(20, 10, "Step 3. Execute")
+    prompt_win.addstr(21, 15 ,"[+] Type 'execute' to perform action")
+
+    prompt_win.refresh()
+
+def print_contextual_help(side_win, context):
+    #TODO
+    side_win.clear()
+    side_win.box()
+    side_win.addstr(0, 14, "Context Tips")
+    
+    if context == "initial":
+        side_win.addstr(2, 1, "Welcome to Stubborn!")
+        side_win.addstr(4, 1, "Suggested commands:")
+        side_win.addstr(5, 4, "> exit")
+        side_win.addstr(6, 4, "> list")
+        side_win.addstr(7, 4, "> help - for more help")
+        side_win.refresh()
+    elif context == "generic_help":
+        side_win.addstr(2, 1, "You are in Help Text")
+        side_win.addstr(4, 1, "Suggested commands:")
+        side_win.addstr(5, 4, "> exit")
+        side_win.addstr(6, 4, "> list")
+        side_win.refresh()
+    elif context == "list_modules":
+        side_win.addstr(2, 1, "You are in Module Listing")
+        side_win.addstr(4, 1, "Suggested commands:")
+        side_win.addstr(5, 4, "> exit")
+        side_win.addstr(6, 4, "> use <module_number>")
+        side_win.addstr(7, 4, "> help - for more help")
+        side_win.refresh()
+    elif context == "module" or context == "options" or context == "info" or context == "set":
+        side_win.addstr(2, 1, "You are in Module Options Setting Mode")
+        side_win.addstr(4, 1, "Suggested commands:")
+        side_win.addstr(5, 4, "> exit")
+        side_win.addstr(6, 4, "> list")
+        side_win.addstr(7, 4, "> info")
+        side_win.addstr(8, 4, "> options")
+        side_win.addstr(9, 4, "> set <option_name> <value>")
+        side_win.addstr(10, 4, "> execute")
+        side_win.addstr(11, 4, "> help - for more help")
+        side_win.refresh()
+    elif context == "execute":
+        side_win.addstr(2, 1, "You are in Module Execution Mode")
+        side_win.addstr(4, 1, "Suggested comamands:")
+        side_win.addstr(5, 4, "> exit")
+        side_win.addstr(6, 4, "> list")
+        side_win.addstr(7, 4, "> help - for more help")
+        side_win.refresh()    
+    else:
+        side_win.clear()
+        side_win.box()
+        side_win.addstr(0, 14, "Context Tips")
+        side_win.addstr(2, 1, "Are you lost?")
+        side_win.addstr(4, 1, "Suggested commands:")
+        side_win.addstr(5, 4, "> exit - close script")
+        side_win.addstr(6, 4, "> help - for more help")
+        side_win.refresh()
+
+def print_modules_list():
+    #TODO
+    pass
+    
+def init_screen():
+    stdscr = curses.initscr()
+    stdscr.keypad(True)
+    curses.nocbreak()
+    curses.echo
+
+    return stdscr
+
+def define_windows():
+    # HEADER_WINDOW
+    header_win = curses.newwin(10, 105, 1, 3)
+    # PROMPT_WINDOW 
+    prompt_win = curses.newwin(44, 105, 11, 3)
+    # SIDE_WINDOW
+    side_win = curses.newwin(54, 40, 1, 109)
+    # FOOTER_WINDOW
+    footer_win = curses.newwin(1, 146, 55, 3)
+
+    return header_win, prompt_win, side_win, footer_win
+
+
+def print_footer_and_header(header_win, footer_win):
+    header_win.box()
+    print_logo(header_win)
+    footer_win.box()
+    footer_win.addstr(0,1, "sud0k1ller, 2021")
+    header_win.refresh()
+    footer_win.refresh()
+
+def print_initial_prompt(prompt_win):
+    prompt_win.box()
+    prompt_win.refresh()
+
+def print_logo(header_win):
+    pass
+
+def print_main_menu():
+    pass 
+
+def print_initial_screen(stdscr, header_win, prompt_win, side_win, footer_win):
+    stdscr.refresh()
+    print_footer_and_header(header_win, footer_win)
+    print_contextual_help(side_win, "initial")
+    print_initial_prompt(prompt_win)
+    handle_prompt_input(prompt_win)
+
+def exit_script():
+    curses.endwin()
+    exit()
+
+def clear_prompt_output(prompt_win):
+    prompt_win.move(3,1)
+    prompt_win.clrtobot()
+
+def handle_prompt_input(prompt_win):
+    while 1:
+        prompt_win.addstr(2, 1, "stubborn_> ")
+        prompt_win.clrtoeol()
+        prompt_win.box()
+        prompt_win.refresh()
+        command = prompt_win.getstr().decode("utf-8")
+        if command == 'exit':
+            exit_script()
+        elif command == 'help':
+            print_contextual_help(side_win, "generic_help")
+            clear_prompt_output(prompt_win)
+            print_generic_help(prompt_win)
+        elif command == 'list':
+            print_contextual_help(side_win, "list_modules")
+            clear_prompt_output(prompt_win)
+        elif 'use ' in command or 'set ' in command or command == "options" or command == "info":
+            print_contextual_help(side_win, "module")
+            clear_prompt_output(prompt_win)
+        elif command == 'execute':
+            print_contextual_help(side_win, "execute")
+            clear_prompt_output(prompt_win)
+            prompt_win.addstr(4, 4, "EXECUTION IN PROGRESS!")
+        else:
+            clear_prompt_output(prompt_win)
+            print_contextual_help(side_win, "invalid")
+            prompt_win.addstr(4,3, "Invalid command")
+            prompt_win.refresh()
+
+        prompt_win.move(1,0)
+        prompt_win.clrtoeol()
+        prompt_win.box()
+        prompt_win.addstr(1,1, "stubborn_> " + str(command))
+        prompt_win.refresh()
+
+# =====    MAIN     =====
+
+# ===== INIT SCREEN =====
+stdscr = init_screen()
+header_win, prompt_win, side_win, footer_win = define_windows()
+print_initial_screen(stdscr, header_win, prompt_win, side_win, footer_win)
+
