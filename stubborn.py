@@ -134,7 +134,6 @@ def print_initial_screen(stdscr, header_win, prompt_win, side_win, footer_win):
     print_footer_and_header(header_win, footer_win)
     print_contextual_help(side_win, "initial")
     print_initial_prompt(prompt_win)
-    handle_prompt_input(prompt_win)
 
 def exit_script():
     curses.endwin()
@@ -185,4 +184,4 @@ def handle_prompt_input(prompt_win):
 stdscr = init_screen()
 header_win, prompt_win, side_win, footer_win = define_windows()
 print_initial_screen(stdscr, header_win, prompt_win, side_win, footer_win)
-
+handle_prompt_input(prompt_win)
