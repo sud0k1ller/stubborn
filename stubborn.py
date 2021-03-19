@@ -5,21 +5,25 @@ import os
 
 def get_modules_files_list():
     modules_list = os.listdir('./modules')
+    for filename in modules_list: 
+        if '.info' in filename: 
+            modules_list.remove(filename) 
     return modules_list
 
 def get_modules_properties_list(modules_list):
     modules_properties_list = []
     for index in range(0, len(modules_list)):
+        #module_properties = [<filename>, <module_name>, <option1>, <option2>, ... ]
         this_module_properties = []
         this_module_options = []
+        option = []
+        this_module_properties.append(modules_list[index]) # Add module's filename to the list
         modules_file = open('./modules/' + modules_list[index])
-        #Get module's name from first line
-        this_module_properties.append(modules_file.readline()[1:])
-        #Get module's options from second line
-        this_module_options = modules_file.readline()[1:].split(',')
-        for option in this_module_options:
+        this_module_properties.append(modules_file.readline()[1:]) #Add module's name to the list
+        while option != "END\n":
+            option = modules_file.readline()[1:]
             this_module_properties.append(option)
-        modules_properties_list.append(this_module_properties)
+        modules_properties_list.append(this_module_properties[:-1])
 
     return modules_properties_list
 
@@ -76,7 +80,6 @@ def print_contextual_help(side_win, context, selected_module_number, modules_pro
         side_win.addstr(10, 4, "> execute")
         side_win.addstr(11, 4, "> help - for more help")
         side_win.refresh()
-
     elif context == "execute":
         side_win.addstr(2, 1, "You are in Module Execution Mode")
         side_win.addstr(4, 1, "Suggested comamands:")
@@ -96,7 +99,7 @@ def print_contextual_help(side_win, context, selected_module_number, modules_pro
 
     if selected_module_number != 0:
         side_win.addstr(15, 4, "Selected module:")
-        side_win.addstr(16, 8, modules_properties_list[selected_module_number - 1][0])
+        side_win.addstr(16, 8, modules_properties_list[selected_module_number - 1][1])
         side_win.box()
         side_win.addstr(0, 14, "Context Tips")
         side_win.refresh()
@@ -104,13 +107,8 @@ def print_contextual_help(side_win, context, selected_module_number, modules_pro
 def print_modules_list(prompt_win, modules_properties_list):
     prompt_win.addstr(4, 3, "Modules list:")
     for module, index in zip(modules_properties_list, range(0,len(modules_properties_list))):
-        prompt_win.addstr(5+index, 6, str("[" + str(index + 1) + "] " + module[0]))
+        prompt_win.addstr(5+index, 6, str("[" + str(index + 1) + "] " + module[1]))
     prompt_win.refresh()
-    pass
-
-def print_modules_options(prompt_win, module_number):
-    #TODO
-    pass
 
 def init_screen():
     stdscr = curses.initscr()
@@ -131,7 +129,6 @@ def define_windows():
     footer_win = curses.newwin(1, 146, 55, 3)
 
     return header_win, prompt_win, side_win, footer_win
-
 
 def print_footer_and_header(header_win, footer_win):
     header_win.box()
@@ -182,8 +179,20 @@ def list_command(side_win, prompt_win, selected_module_number, modules_propertie
     clear_prompt_output(prompt_win)
     print_modules_list(prompt_win, modules_properties_list)
 
+
+def list_modules_options(prompt_win, option, offset):
+    option_parts = option.split(",")
+    prompt_win.addstr(7, 10, '{:<20}'.format("OPTION") + '{:<20}'.format("REQUIRED") + '{:<20}'.format("DESCRIPTION"))
+    prompt_win.addstr(9+offset, 10, '{:<20}'.format(option_parts[0]) + '{:<20}'.format(option_parts[1]) + '{:<20}'.format(option_parts[2]))
+
 def options_command(prompt_win, side_win, selected_module_number, modules_properties_list):
-    pass
+    print_contextual_help(side_win, "module", selected_module_number, modules_properties_list)
+    clear_prompt_output(prompt_win)
+    prompt_win.addstr(4, 4, "Module Options")
+    prompt_win.addstr(5, 4, "Module Name: " + str(modules_properties_list[selected_module_number - 1][1]))
+    for option, offset in zip(modules_properties_list[selected_module_number - 1][2:], range(0, len(modules_properties_list[selected_module_number - 1][2:]))):
+        list_modules_options(prompt_win, option, offset)
+    prompt_win.refresh()
 
 def info_command(prompt_win, side_win, selected_module_number, modules_properties_list):
     pass
@@ -224,7 +233,6 @@ def handle_prompt_input(prompt_win, modules_properties_list):
                     info_command(prompt_win, side_win, selected_module_number, modules_properties_list)
                 elif 'set ' in command:
                     set_command(prompt_win, side_win, selected_module_number, modules_properties_list)
-
         elif command == 'execute':
             print_contextual_help(side_win, "execute", selected_module_number, modules_properties_list)
             clear_prompt_output(prompt_win)
@@ -248,3 +256,5 @@ print_initial_screen(stdscr, header_win, prompt_win, side_win, footer_win, modul
 
 # ===== MAIN FUNCTIONAL FUNCTION =====
 handle_prompt_input(prompt_win, modules_properties_list)
+
+#print(get_modules_properties_list(get_modules_files_list()))
