@@ -195,7 +195,20 @@ def options_command(prompt_win, side_win, selected_module_number, modules_proper
     prompt_win.refresh()
 
 def info_command(prompt_win, side_win, selected_module_number, modules_properties_list):
-    pass
+    print_contextual_help(side_win, "module", selected_module_number, modules_properties_list)
+    clear_prompt_output(prompt_win)
+    prompt_win.addstr(4, 4, "Module Info")
+    try:
+        module_info_file = open('./modules/' + modules_properties_list[selected_module_number - 1][0].split('.')[0] + ".info")
+        prompt_win.move(6,4)
+        offset = 1
+        for line in module_info_file:
+            prompt_win.addstr(6 + offset, 4, line)
+            offset += 1
+        prompt_win.refresh()
+    except:
+        prompt_win.addstr(6, 4, "No module info file found!")
+        prompt_win.refresh()
 
 def set_command(prompt_win, side_win, selected_module_number, modules_properties_list):
     pass
