@@ -13,7 +13,7 @@ def get_modules_files_list():
 def get_modules_properties_list(modules_list):
     modules_properties_list = []
     for index in range(0, len(modules_list)):
-        #module_properties = [<filename>, <module_name>, <option1>, <option2>, ... ]
+        #module_properties = [<filename>, <module_name>, <"opt1_name", "req", "desc">, <"opt2_name", "req", "desc">, ... ]
         this_module_properties = []
         this_module_options = []
         option = []
@@ -160,8 +160,13 @@ def clear_prompt_output(prompt_win):
     prompt_win.clrtobot()
 
 def use_command(prompt_win, side_win, selected_module_number, modules_properties_list):
+    selected_module_options_values = []
     print_contextual_help(side_win, "module", selected_module_number, modules_properties_list)
     clear_prompt_output(prompt_win)
+    for option in modules_properties_list[selected_module_number - 1][2:]:
+        selected_module_options_values.append([option.split(",")[0], ""])
+    
+    return selected_module_options_values
 
 def invalid_command(prompt_win, side_win, selected_module_number, modules_properties_list):
     clear_prompt_output(prompt_win)
@@ -180,18 +185,23 @@ def list_command(side_win, prompt_win, selected_module_number, modules_propertie
     print_modules_list(prompt_win, modules_properties_list)
 
 
-def list_modules_options(prompt_win, option, offset):
-    option_parts = option.split(",")
-    prompt_win.addstr(7, 10, '{:<20}'.format("OPTION") + '{:<20}'.format("REQUIRED") + '{:<20}'.format("DESCRIPTION"))
-    prompt_win.addstr(9+offset, 10, '{:<20}'.format(option_parts[0]) + '{:<20}'.format(option_parts[1]) + '{:<20}'.format(option_parts[2]))
+def list_modules_options(prompt_win, option, offset, selected_module_options_values):
+    prompt_win.addstr(7, 5, '{:<15}'.format("OPTION") + '{:<10}'.format("REQUIRED") + '{:<50}'.format("DESCRIPTION") + '{:<15}'.format("VALUE"))
+    index =  [element[0] for element in selected_module_options_values].index(option.split(",")[0])
+    if selected_module_options_values[index][1] != "":
+        option_parts = option.split(",")
+        prompt_win.addstr(9+offset, 5, '{:<15}'.format(option_parts[0]) + '{:<10}'.format(option_parts[1]) + '{:<50}'.format(option_parts[2][:-1]) + '{:<15}'.format(selected_module_options_values[index][1]))
+    else:
+        option_parts = option.split(",")
+        prompt_win.addstr(9+offset, 5, '{:<15}'.format(option_parts[0]) + '{:<10}'.format(option_parts[1]) + '{:<50}'.format(option_parts[2][:-1]))
 
-def options_command(prompt_win, side_win, selected_module_number, modules_properties_list):
+def options_command(prompt_win, side_win, selected_module_number, modules_properties_list, selected_module_options_values):
     print_contextual_help(side_win, "module", selected_module_number, modules_properties_list)
     clear_prompt_output(prompt_win)
     prompt_win.addstr(4, 4, "Module Options")
     prompt_win.addstr(5, 4, "Module Name: " + str(modules_properties_list[selected_module_number - 1][1]))
     for option, offset in zip(modules_properties_list[selected_module_number - 1][2:], range(0, len(modules_properties_list[selected_module_number - 1][2:]))):
-        list_modules_options(prompt_win, option, offset)
+        list_modules_options(prompt_win, option, offset, selected_module_options_values)
     prompt_win.refresh()
 
 def info_command(prompt_win, side_win, selected_module_number, modules_properties_list):
@@ -210,11 +220,19 @@ def info_command(prompt_win, side_win, selected_module_number, modules_propertie
         prompt_win.addstr(6, 4, "No module info file found!")
         prompt_win.refresh()
 
-def set_command(prompt_win, side_win, selected_module_number, modules_properties_list, command):
-    pass 
+def set_command(prompt_win, side_win, command, selected_module_options_values, selected_module_number, modules_properties_list):
+    if len(command.split()) != 3:
+        invalid_command(prompt_win, side_win, selected_module_number, modules_properties_list)
+    else:
+        try:
+            index = [element[0] for element in selected_module_options_values].index(command.split()[1])
+            selected_module_options_values[index][1] = command.split()[2]
+        except:
+            prompt_win.addstr(4, 4, "No such option")
 
 def handle_prompt_input(prompt_win, modules_properties_list):
     selected_module_number = 0
+    selected_module_options_values = []
     while 1:
         prompt_win.addstr(2, 1, "stubborn_> ")
         prompt_win.clrtoeol()
@@ -230,7 +248,7 @@ def handle_prompt_input(prompt_win, modules_properties_list):
         elif command.startswith('use '):
             if len(command.split()) == 2 and 0 < int(command.split()[1]) <= len(modules_properties_list):
                 selected_module_number = int(command.split()[1])
-                use_command(prompt_win, side_win, selected_module_number, modules_properties_list)
+                selected_module_options_values = use_command(prompt_win, side_win, selected_module_number, modules_properties_list)
             else:
                 invalid_command(prompt_win, side_win, selected_module_number, modules_properties_list)
         elif command.startswith('set ') or command == "options" or command == "info":
@@ -241,15 +259,15 @@ def handle_prompt_input(prompt_win, modules_properties_list):
                 print_contextual_help(side_win, "module", selected_module_number, modules_properties_list)
                 clear_prompt_output(prompt_win)
                 if command == "options":
-                    options_command(prompt_win, side_win, selected_module_number, modules_properties_list)
+                    options_command(prompt_win, side_win, selected_module_number, modules_properties_list, selected_module_options_values)
                 elif command == "info":
                     info_command(prompt_win, side_win, selected_module_number, modules_properties_list)
                 elif 'set ' in command:
-                    set_command(prompt_win, side_win, selected_module_number, modules_properties_list, command)
+                    set_command(prompt_win, side_win, command, selected_module_options_values, selected_module_number, modules_properties_list)
         elif command == 'execute':
             print_contextual_help(side_win, "execute", selected_module_number, modules_properties_list)
             clear_prompt_output(prompt_win)
-            prompt_win.addstr(4, 4, "EXECUTION IN PROGRESS!")
+            prompt_win.addstr(4, 4, "EXECUTION IN PROGRESS!") #TODO execute_option()
         else:
             invalid_command(prompt_win, side_win, selected_module_number, modules_properties_list)
            
@@ -270,4 +288,3 @@ print_initial_screen(stdscr, header_win, prompt_win, side_win, footer_win, modul
 # ===== MAIN FUNCTIONAL FUNCTION =====
 handle_prompt_input(prompt_win, modules_properties_list)
 
-#print(get_modules_properties_list(get_modules_files_list()))
