@@ -164,8 +164,10 @@ def use_command(prompt_win, side_win, selected_module_number, modules_properties
     print_contextual_help(side_win, "module", selected_module_number, modules_properties_list)
     clear_prompt_output(prompt_win)
     for option in modules_properties_list[selected_module_number - 1][2:]:
-        selected_module_options_values.append([option.split(",")[0], ""])
-    
+        if option.split(",")[1] == "yes": #IS REQUIRED?
+            selected_module_options_values.append([option.split(",")[0], "", True])
+        else: 
+            selected_module_options_values.append([option.split(",")[0], "", False])
     return selected_module_options_values
 
 def invalid_command(prompt_win, side_win, selected_module_number, modules_properties_list):
