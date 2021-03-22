@@ -210,8 +210,8 @@ def info_command(prompt_win, side_win, selected_module_number, modules_propertie
         prompt_win.addstr(6, 4, "No module info file found!")
         prompt_win.refresh()
 
-def set_command(prompt_win, side_win, selected_module_number, modules_properties_list):
-    pass
+def set_command(prompt_win, side_win, selected_module_number, modules_properties_list, command):
+    pass 
 
 def handle_prompt_input(prompt_win, modules_properties_list):
     selected_module_number = 0
@@ -227,13 +227,13 @@ def handle_prompt_input(prompt_win, modules_properties_list):
             help_command(side_win, prompt_win, selected_module_number, modules_properties_list)
         elif command == 'list':
             list_command(side_win, prompt_win, selected_module_number, modules_properties_list)
-        elif 'use ' in command:
+        elif command.startswith('use '):
             if len(command.split()) == 2 and 0 < int(command.split()[1]) <= len(modules_properties_list):
                 selected_module_number = int(command.split()[1])
                 use_command(prompt_win, side_win, selected_module_number, modules_properties_list)
             else:
                 invalid_command(prompt_win, side_win, selected_module_number, modules_properties_list)
-        elif 'set ' in command or command == "options" or command == "info":
+        elif command.startswith('set ') or command == "options" or command == "info":
             if selected_module_number == 0:
                 clear_prompt_output(prompt_win)
                 prompt_win.addstr(4, 4, "No module was selected! Type 'use <module_number> to select module.")
@@ -245,7 +245,7 @@ def handle_prompt_input(prompt_win, modules_properties_list):
                 elif command == "info":
                     info_command(prompt_win, side_win, selected_module_number, modules_properties_list)
                 elif 'set ' in command:
-                    set_command(prompt_win, side_win, selected_module_number, modules_properties_list)
+                    set_command(prompt_win, side_win, selected_module_number, modules_properties_list, command)
         elif command == 'execute':
             print_contextual_help(side_win, "execute", selected_module_number, modules_properties_list)
             clear_prompt_output(prompt_win)
