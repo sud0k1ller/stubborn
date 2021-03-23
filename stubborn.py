@@ -251,7 +251,6 @@ def execute_command(prompt_win, side_win, selected_module_options_values, select
     if all_required_options_have_values(selected_module_options_values):
         module_name = modules_properties_list[selected_module_number - 1][0][:-3]
         module_arguments_list = [values[1] for values in selected_module_options_values]
-        #getattr(modules, module_name)(main) #Execute module
         module = importlib.import_module("modules." + module_name)
         module.main(module_arguments_list)
     else:
@@ -295,20 +294,30 @@ def handle_prompt_input(prompt_win, modules_properties_list):
             print_contextual_help(side_win, "execute", selected_module_number, modules_properties_list)
             clear_prompt_output(prompt_win)
             prompt_win.addstr(4, 4, "EXECUTION IN PROGRESS!")
-            #try:
-            execute_command(prompt_win, side_win, selected_module_options_values, selected_module_number, modules_properties_list)
-            #except:
-            #clear_prompt_output(prompt_win)
-            #prompt_win.addstr(4, 4, "MODULE EXECUTION FAILED!")
-            #prompt_win.refresh()
+            try:
+                execute_command(prompt_win, side_win, selected_module_options_values, selected_module_number, modules_properties_list)
+            except:
+                clear_prompt_output(prompt_win)
+                prompt_win.addstr(4, 4, "MODULE EXECUTION FAILED!")
+                prompt_win.addstr(5, 4, "Check if all options are set correctly")
+                prompt_win.refresh()
         else:
             invalid_command(prompt_win, side_win, selected_module_number, modules_properties_list)
-           
-        prompt_win.move(1,0)
-        prompt_win.clrtoeol()
-        prompt_win.box()
-        prompt_win.addstr(1,1, "stubborn_> " + str(command))
-        prompt_win.refresh()
+        
+        if command.startswith('set '): #if option value is set, do not flush prompt, just refresh  
+            options_command(prompt_win, side_win, selected_module_number, modules_properties_list, selected_module_options_values)
+            prompt_win.move(1,0)
+            prompt_win.box()
+            prompt_win.addstr(1,1, "stubborn_> " + str(command))
+            prompt_win.refresh()
+        
+        else:    
+            prompt_win.move(1,0)
+            prompt_win.clrtoeol()
+            prompt_win.box()
+            prompt_win.addstr(1,1, "stubborn_> " + str(command))
+            prompt_win.refresh()
+
 
 # =====    MAIN     =====
 modules_properties_list = get_modules_properties_list(get_modules_files_list())
