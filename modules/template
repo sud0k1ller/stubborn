@@ -7,7 +7,7 @@
 #OPTION5,YES,DESCRIPTION
 #END
 
-def main(opt1, opt2, opt3, opt4, opt5):
+def main(arguments): #arguments is an array
 	pass
 
-main(opt1, opt2, opt3, opt4, opt5)
+main(arguments)

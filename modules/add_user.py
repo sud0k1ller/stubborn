@@ -6,7 +6,6 @@
 #system,no,Create system user (yes/no)
 #END
 
-
-def main(arg1, arg2, arg3):
-    print(arg1, arg2, arg3)
+def main(arguments):
+    print(arguments[0], arguments[1], arguments[2], arguments[3])
 
