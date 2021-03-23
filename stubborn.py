@@ -174,9 +174,9 @@ def use_command(prompt_win, side_win, selected_module_number, modules_properties
     clear_prompt_output(prompt_win)
     for option in modules_properties_list[selected_module_number - 1][2:]:
         if option.split(",")[1] == "yes": #IS REQUIRED?
-            selected_module_options_values.append([option.split(",")[0], "", True])
+            selected_module_options_values.append([option.split(",")[0].replace(" ", "_"), "", True])
         else: 
-            selected_module_options_values.append([option.split(",")[0], "", False])
+            selected_module_options_values.append([option.split(",")[0].replace(" ", "_"), "", False])
     return selected_module_options_values
 
 def invalid_command(prompt_win, side_win, selected_module_number, modules_properties_list):
@@ -198,13 +198,13 @@ def list_command(side_win, prompt_win, selected_module_number, modules_propertie
 
 def list_modules_options(prompt_win, option, offset, selected_module_options_values):
     prompt_win.addstr(7, 5, '{:<15}'.format("OPTION") + '{:<10}'.format("REQUIRED") + '{:<50}'.format("DESCRIPTION") + '{:<15}'.format("VALUE"))
-    index =  [element[0] for element in selected_module_options_values].index(option.split(",")[0])
+    index =  [element[0] for element in selected_module_options_values].index(option.split(",")[0].replace(" ", "_"))
     if selected_module_options_values[index][1] != "":
         option_parts = option.split(",")
-        prompt_win.addstr(9+offset, 5, '{:<15}'.format(option_parts[0]) + '{:<10}'.format(option_parts[1]) + '{:<50}'.format(option_parts[2][:-1]) + '{:<15}'.format(selected_module_options_values[index][1]))
+        prompt_win.addstr(9+offset, 5, '{:<15}'.format(option_parts[0].replace(" ", "_")) + '{:<10}'.format(option_parts[1]) + '{:<50}'.format(option_parts[2][:-1]) + '{:<15}'.format(selected_module_options_values[index][1]))
     else:
         option_parts = option.split(",")
-        prompt_win.addstr(9+offset, 5, '{:<15}'.format(option_parts[0]) + '{:<10}'.format(option_parts[1]) + '{:<50}'.format(option_parts[2][:-1]))
+        prompt_win.addstr(9+offset, 5, '{:<15}'.format(option_parts[0].replace(" ", "_")) + '{:<10}'.format(option_parts[1]) + '{:<50}'.format(option_parts[2][:-1]))
 
 def options_command(prompt_win, side_win, selected_module_number, modules_properties_list, selected_module_options_values):
     print_contextual_help(side_win, "module", selected_module_number, modules_properties_list)
@@ -239,7 +239,8 @@ def set_command(prompt_win, side_win, command, selected_module_options_values, s
             index = [element[0] for element in selected_module_options_values].index(command.split()[1])
             selected_module_options_values[index][1] = command.split()[2]
         except:
-            prompt_win.addstr(4, 4, "No such option")
+            side_win.addstr(20, 4, "No such option", curses.A_BLINK)
+            side_win.refresh()
 
 def all_required_options_have_values(selected_module_options_values):
     for option in selected_module_options_values:
@@ -253,6 +254,7 @@ def execute_command(prompt_win, side_win, selected_module_options_values, select
         module_arguments_list = [values[1] for values in selected_module_options_values]
         module = importlib.import_module("modules." + module_name)
         module.main(module_arguments_list)
+        prompt_win.addstr(4, 4, "EXECUTION SUCCESSFUL!")
     else:
         prompt_win.addstr(4, 4, "All required options must have values set!")
 
@@ -304,20 +306,11 @@ def handle_prompt_input(prompt_win, modules_properties_list):
         else:
             invalid_command(prompt_win, side_win, selected_module_number, modules_properties_list)
         
-        if command.startswith('set '): #if option value is set, do not flush prompt, just refresh  
-            options_command(prompt_win, side_win, selected_module_number, modules_properties_list, selected_module_options_values)
-            prompt_win.move(1,0)
-            prompt_win.clrtoeol()
-            prompt_win.box()
-            prompt_win.addstr(1,1, "stubborn_> " + str(command))
-            prompt_win.refresh()
-        
-        else:    
-            prompt_win.move(1,0)
-            prompt_win.clrtoeol()
-            prompt_win.box()
-            prompt_win.addstr(1,1, "stubborn_> " + str(command))
-            prompt_win.refresh()
+        prompt_win.move(1,0)
+        prompt_win.clrtoeol()
+        prompt_win.box()
+        prompt_win.addstr(1,1, "stubborn_> " + str(command))
+        prompt_win.refresh()
 
 
 # =====    MAIN     =====
