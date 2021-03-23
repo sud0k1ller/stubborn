@@ -2,12 +2,14 @@
 
 import curses
 import os
+from modules import *
 
 def get_modules_files_list():
     modules_list = os.listdir('./modules')
     for filename in modules_list: 
-        if '.info' in filename: 
-            modules_list.remove(filename) 
+        if '.py' not in filename: 
+            modules_list.remove(filename)
+    modules_list.remove("__init__.py")
     return modules_list
 
 def get_modules_properties_list(modules_list):
@@ -19,6 +21,7 @@ def get_modules_properties_list(modules_list):
         option = []
         this_module_properties.append(modules_list[index]) # Add module's filename to the list
         modules_file = open('./modules/' + modules_list[index])
+        modules_file.readline() #DROP SHEBANG
         this_module_properties.append(modules_file.readline()[1:]) #Add module's name to the list
         while option != "END\n":
             option = modules_file.readline()[1:]
@@ -143,7 +146,12 @@ def print_initial_prompt(prompt_win):
     prompt_win.refresh()
 
 def print_logo(header_win):
-    pass
+    header_win.addstr(3, 15, "    ___    __  ___          / __     / __      ___      __       __    ")   
+    header_win.addstr(4, 15, "  ((   ) )  / /   //   / / //   ) ) //   ) ) //   ) ) //  ) ) //   ) ) ")
+    header_win.addstr(5, 15, "   \ \     / /   //   / / //   / / //   / / //   / / //      //   / /  ")
+    header_win.addstr(6, 15, "//   ) )  / /   ((___( ( ((___/ / ((___/ / ((___/ / //      //   / /   ")
+    header_win.refresh()
+
 
 def print_initial_screen(stdscr, header_win, prompt_win, side_win, footer_win, modules_properties_list):
     stdscr.refresh()
@@ -232,6 +240,18 @@ def set_command(prompt_win, side_win, command, selected_module_options_values, s
         except:
             prompt_win.addstr(4, 4, "No such option")
 
+def all_required_options_have_values(selected_module_options_values):
+    for option in selected_module_options_values:
+        if option[3] and option[2] == "":
+            return False
+    return True
+
+def execute_command(prompt_win, side_win, selected_module_options_values, selected_module_number, module_properties_list):
+    if all_required_options_has_values(selected_module_options_values):
+        pass    
+    else:
+        prompt_win.addstr(4, 4, "All required options must have values set!")
+
 def handle_prompt_input(prompt_win, modules_properties_list):
     selected_module_number = 0
     selected_module_options_values = []
@@ -269,7 +289,8 @@ def handle_prompt_input(prompt_win, modules_properties_list):
         elif command == 'execute':
             print_contextual_help(side_win, "execute", selected_module_number, modules_properties_list)
             clear_prompt_output(prompt_win)
-            prompt_win.addstr(4, 4, "EXECUTION IN PROGRESS!") #TODO execute_option()
+            prompt_win.addstr(4, 4, "EXECUTION IN PROGRESS!")
+            execute_command(prompt_win, side_win, selected_module_options_values, selected_module_number, module_properties_list)
         else:
             invalid_command(prompt_win, side_win, selected_module_number, modules_properties_list)
            
@@ -281,12 +302,12 @@ def handle_prompt_input(prompt_win, modules_properties_list):
 
 # =====    MAIN     =====
 modules_properties_list = get_modules_properties_list(get_modules_files_list())
-
+add_user.main("TEST ", "DUPA", "KoŃ")
 # ===== INIT SCREEN =====
-stdscr = init_screen()
-header_win, prompt_win, side_win, footer_win = define_windows()
-print_initial_screen(stdscr, header_win, prompt_win, side_win, footer_win, modules_properties_list)
+#stdscr = init_screen()
+#header_win, prompt_win, side_win, footer_win = define_windows()
+#print_initial_screen(stdscr, header_win, prompt_win, side_win, footer_win, modules_properties_list)
 
 # ===== MAIN FUNCTIONAL FUNCTION =====
-handle_prompt_input(prompt_win, modules_properties_list)
+#handle_prompt_input(prompt_win, modules_properties_list)
 
