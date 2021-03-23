@@ -307,6 +307,7 @@ def handle_prompt_input(prompt_win, modules_properties_list):
         if command.startswith('set '): #if option value is set, do not flush prompt, just refresh  
             options_command(prompt_win, side_win, selected_module_number, modules_properties_list, selected_module_options_values)
             prompt_win.move(1,0)
+            prompt_win.clrtoeol()
             prompt_win.box()
             prompt_win.addstr(1,1, "stubborn_> " + str(command))
             prompt_win.refresh()
