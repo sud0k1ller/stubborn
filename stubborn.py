@@ -2,6 +2,7 @@
 
 import curses
 import os
+import importlib
 from modules import *
 
 def get_modules_files_list():
@@ -242,13 +243,17 @@ def set_command(prompt_win, side_win, command, selected_module_options_values, s
 
 def all_required_options_have_values(selected_module_options_values):
     for option in selected_module_options_values:
-        if option[3] and option[2] == "":
+        if option[2] and option[1] == "":
             return False
     return True
 
-def execute_command(prompt_win, side_win, selected_module_options_values, selected_module_number, module_properties_list):
-    if all_required_options_has_values(selected_module_options_values):
-        pass    
+def execute_command(prompt_win, side_win, selected_module_options_values, selected_module_number, modules_properties_list):
+    if all_required_options_have_values(selected_module_options_values):
+        module_name = modules_properties_list[selected_module_number - 1][0][:-3]
+        module_arguments_list = [values[1] for values in selected_module_options_values]
+        #getattr(modules, module_name)(main) #Execute module
+        module = importlib.import_module("modules." + module_name)
+        module.main(module_arguments_list)
     else:
         prompt_win.addstr(4, 4, "All required options must have values set!")
 
@@ -290,7 +295,12 @@ def handle_prompt_input(prompt_win, modules_properties_list):
             print_contextual_help(side_win, "execute", selected_module_number, modules_properties_list)
             clear_prompt_output(prompt_win)
             prompt_win.addstr(4, 4, "EXECUTION IN PROGRESS!")
-            execute_command(prompt_win, side_win, selected_module_options_values, selected_module_number, module_properties_list)
+            #try:
+            execute_command(prompt_win, side_win, selected_module_options_values, selected_module_number, modules_properties_list)
+            #except:
+            #clear_prompt_output(prompt_win)
+            #prompt_win.addstr(4, 4, "MODULE EXECUTION FAILED!")
+            #prompt_win.refresh()
         else:
             invalid_command(prompt_win, side_win, selected_module_number, modules_properties_list)
            
@@ -302,12 +312,11 @@ def handle_prompt_input(prompt_win, modules_properties_list):
 
 # =====    MAIN     =====
 modules_properties_list = get_modules_properties_list(get_modules_files_list())
-add_user.main("TEST ", "DUPA", "KoŃ")
 # ===== INIT SCREEN =====
-#stdscr = init_screen()
-#header_win, prompt_win, side_win, footer_win = define_windows()
-#print_initial_screen(stdscr, header_win, prompt_win, side_win, footer_win, modules_properties_list)
+stdscr = init_screen()
+header_win, prompt_win, side_win, footer_win = define_windows()
+print_initial_screen(stdscr, header_win, prompt_win, side_win, footer_win, modules_properties_list)
 
 # ===== MAIN FUNCTIONAL FUNCTION =====
-#handle_prompt_input(prompt_win, modules_properties_list)
+handle_prompt_input(prompt_win, modules_properties_list)
 
