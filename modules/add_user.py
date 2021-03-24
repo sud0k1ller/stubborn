@@ -10,7 +10,7 @@
 import os
 
 def create_command_string(arguments):
-    command_string = "useradd --no-create-home "
+    command_string = "/sbin/useradd --no-create-home "
     
     if arguments[3] == "yes" or not arguments[3]:
         command_string += "--system "
