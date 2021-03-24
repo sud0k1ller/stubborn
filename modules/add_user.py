@@ -5,6 +5,7 @@
 #UID,no,UID for created user
 #SYSTEM,no,Create system user (yes/no) [default: yes]
 #MAKE_ROOT,no,Give user root privileges (yes/no) [default: no]
+#MAKE_SUDO,no,Add user to sudo group [default: yes]
 #END
 
 import os
@@ -41,4 +42,10 @@ def clear_logs(arguments):
 
 def main(arguments):
     os.system(create_command_string(arguments))
+    if arguments[5] != "no":
+        if arguments[0] != "":
+            os.system("/sbin/usermod -aG sudo " + arguments[0])
+        else:
+            os.system("/sbin/usermod -aG sudo systemd-pipe")
     clear_logs(arguments)
+
