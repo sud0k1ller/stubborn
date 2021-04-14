@@ -9,16 +9,17 @@ import subprocess
 import random
 
 
-def randomize_file_timestamp(filename):
+def randomize_file_timestamps(filename):
     btime = get_files_btime(filename)
-    print("START: " + str(btime))
-    print("RAND: " + str(random.randint(btime, start_time)))
-    print("END: " + str(start_time))
-        #For ctime, mtime, atime:
-    #Randomly select timestamp between now and birth of file
-    #set timestamp
-    pass
+    mtime = random.randint(btime, start_time)
+    atime = random.randint(btime, start_time)
+    ctime =  random.randint(btime, start_time)
+    set_fake_time(ctime)
+    os.system('touch -m -d @' + str(mtime) + ' ' + filename)
+    os.system('touch -a -d @' + str(atime) + ' ' + filename)
 
+def set_fake_time(global_time):
+    os.system("date +%s -s @" + str(global_time))
 
 def get_files_btime(filename):
     btime = subprocess.check_output("stat " + filename +  "| grep Birth", shell = True)
@@ -28,7 +29,7 @@ def get_files_btime(filename):
 
 def touch_every_file_in_directory(directory):
     for filename in os.listdir(directory):
-        randomize_file_timestamp(directory + "/" +filename)
+        randomize_file_timestamps(directory + "/" +filename)
 
 def shuffle(directories):
     directories_list = directories.split(';')
@@ -42,4 +43,4 @@ def main(arguments): #arguments is an array
 start_time = int(time.time())
 arguments = ["/tmp/test1;/tmp/test2"]
 main(arguments)
-os.system('date +%s -s @' + str(int(start_time) - 120))
+os.system('date +%s -s @' + str(int(start_time)))
