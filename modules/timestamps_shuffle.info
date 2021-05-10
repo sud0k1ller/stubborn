@@ -1,0 +1,9 @@
+            ### Timestamps Shuffle Module Info File ###
+
+    Timestamps Shuffle randomizes mtime, ctime and atime of any file in given directories.
+    It is not recursive.   
+ 
+    OPTIONS:
+    
+    DIRS    Required: YES    Dirs that require timestamp shuffling (Example: DIRS='/bin;/home/;/etc')
+
