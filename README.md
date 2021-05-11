@@ -21,7 +21,7 @@ The main goal is to keep requirements as low as it is possible, so this list wil
 **Python version:**
 * python3
 * git
-* curses (temporarily)
+* curses (only for stubborn_gui.py)
 * gcc, gnulib autotools and many more tools for sources building (just in experimental modules)
 
 ## TODO
