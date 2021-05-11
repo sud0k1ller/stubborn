@@ -31,4 +31,4 @@ The main goal is to keep requirements as low as it is possible, so this list wil
 
 [ ] Bash version
 
-[ ] No GUI version
+[X] No GUI version

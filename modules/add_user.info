@@ -1,4 +1,13 @@
-This is info about Create User module.
+            ### Add User Module Info File ###
 
-Some text.
-Some text2
+    This module creates new user and erases info from log files.
+    
+    OPTIONS:
+    
+    USERNAME    Required: NO    Username for created user
+    PASSWORD    Required: NO    Password for created user
+    UID         Required: NO    UID for created user
+    SYSTEM      Required: NO    Create system user (yes/no) [default: yes]
+    MAKE_ROOT   Required: NO    Give user root privileges (yes/no) [default: no]
+    MAKE_SUDO   Required: NO    Add user to sudo group [default: yes]
+
