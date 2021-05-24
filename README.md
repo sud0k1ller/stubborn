@@ -25,15 +25,20 @@ The main goal is to keep requirements as low as it is possible, so this list wil
 * gcc, gnulib autotools and many more tools for sources building (just in experimental modules)
 
 ## Modules testing
-  * [add_user.py] tested on:
+Modules were initially wriiten on Kali Linux but at the moment they are tested on platforms listed below:
       - [Debian] Linux debian 4.19.0-16-amd64 #1 SMP Debian 4.19.181-1 (2021-03-19) x86_64 GNU/Linux
       - [Fedora] Linux fedora 5.8.15-301.fc33.x86_64 #1 SMP Thu Oct 15 16:58:06 UTC 2020 x86_64 x86_64 x86_64 GNU/Linux
-  * [suid_binary.py] tested on:
-      - [Debian] Linux debian 4.19.0-16-amd64 #1 SMP Debian 4.19.181-1 (2021-03-19) x86_64 GNU/Linux
-      - [Fedora] Linux fedora 5.8.15-301.fc33.x86_64 #1 SMP Thu Oct 15 16:58:06 UTC 2020 x86_64 x86_64 x86_64 GNU/Linux
+      - [CentOS] 
+      - [Ubuntu]
+      - [Kali]   
+
+Modules that are already tested:
+      - add_user.py
+
+Other modules can still work 
 
 ## TODO
-[ ] Multidistro testing
+[ In progress ] Multidistro testing
 
 [ ] Windows version
 
