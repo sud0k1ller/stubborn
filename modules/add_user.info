@@ -1,6 +1,7 @@
             ### Add User Module Info File ###
 
     This module creates new user and erases info from log files.
+    Launching module with default settings will create 'systemd-pipe' system account in sudo/wheel group with password 'pass123'.
     
     OPTIONS:
     
@@ -11,3 +12,6 @@
     MAKE_ROOT   Required: NO    Give user root privileges (yes/no) [default: no]
     MAKE_SUDO   Required: NO    Add user to sudo group [default: yes]
 
+    TIPS AND WARNINGS:
+      [1] Creating user as root account can cause that authenticating via SSH will not be possible
+      [2] Make sure that UID is not used by other account 
