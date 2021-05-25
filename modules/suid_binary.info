@@ -1,0 +1,12 @@
+                        ### Set Capabilities Module Info File ###
+
+    This module adds SUID bit to given file. By default it tries to add SUID 
+    bit to /bin/vim binary giving opportunity to obtain escalated shell via vim.  
+
+    OPTIONS:
+    
+    PATH    Required: NO    Path to file
+
+    TIPS AND WARNINGS:
+
+    [1] If default mode is used, make sure to check that vim binary exist

