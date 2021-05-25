@@ -34,6 +34,7 @@ Modules were initially wriiten on Kali Linux but at the moment they are tested o
 
 Modules that are already tested:
 - add_user.py
+- setcap_suid_file.py
 
 Other modules can still work in unexpected way on distros other than Kali Linux. 
 
