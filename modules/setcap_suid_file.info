@@ -1,0 +1,13 @@
+            ### Set Capabilities Module Info File ###
+
+    This module adds 'cap_setuid' capability to file. By default it tries to add capability to
+    python2.7 binary giving opportunity to obtain escalated shell via python (link below).
+    [https://book.hacktricks.xyz/linux-unix/privilege-escalation/linux-capabilities]    
+
+    OPTIONS:
+    
+    PATH    Required: NO    Path to file
+
+    TIPS AND WARNINGS:
+
+    [1] If default mode is used, make sure to check that python2.7 binary exists
