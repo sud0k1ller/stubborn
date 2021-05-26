@@ -1,0 +1,12 @@
+            
+    ### SSH Authorized Keys Module Info File ###
+
+    This module takes SSH public RSA key and places it in authorized_keys file of choosen user.
+    If no key is given, it is created and placed in /tmp directory with random name.
+    If no user is given, one of available authorized_keys files is choosen from /home directory 
+    or root user's authorized_key file is used.
+
+    OPTIONS:
+    
+    USER        Required: NO    Username of choosen authorized_keys owner
+    KEY_PATH    Required: NO    Path to own, earlier generated, key file (.pub)
