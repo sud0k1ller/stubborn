@@ -12,7 +12,7 @@ Post exploitation is sadly underrated, especially at the beginning of cybersecur
 
 Creating this tool is my way of gaining some knowledge about Linux systems from administrators perspective, security mechanisms, building software from sources and automating tasks.
 
-## Usage
+## Overview and usage
 ### stubborn_arg.py - version using argparser library
 ----
 To check available modules, simply use '--list':
@@ -28,7 +28,33 @@ Generic help is available with '--help':
 ![stubborn_help](https://user-images.githubusercontent.com/54325660/119622980-03574980-be08-11eb-8f7c-756143f0b2d7.png)
 
 ### stubborn_gui.py - version using curses library
-IMPORTANT! This version was made just for fun and was not tested on all distros and is not developed any more. 
+**IMPORTANT!** This version was made just for fun and was not tested on all distros, is not developed any more and has many bugs a.k.a unexpected features. 
+
+Run './stubborn_gui.py' and, if you are lucky you will see this:
+![stubborn_gui_main](https://user-images.githubusercontent.com/54325660/119637523-078a6380-be16-11eb-8fbe-4f5ba93583f4.png)
+Main window contains two interactive parts 'Interpreter' part and 'Context Tips' part.
+
+In order to list modules use 'list' command in interpreter part:
+![stubborn_gui_list](https://user-images.githubusercontent.com/54325660/119639502-f5a9c000-be17-11eb-93ae-393434a94a80.png)
+
+Module is choosen by number with 'use' command:
+![stubborn_gui_use](https://user-images.githubusercontent.com/54325660/119639476-f0e50c00-be17-11eb-9509-2f1fd4692b7e.png)
+
+If module is choosen 'info' or 'options' commands can be used to get additional information:
+![stubborn_gui_info](https://user-images.githubusercontent.com/54325660/119639595-0c501700-be18-11eb-9cfd-8cfc4f8d7aa1.png)
+![stubborn_gui_options](https://user-images.githubusercontent.com/54325660/119639604-0f4b0780-be18-11eb-93ec-436881901568.png)
+
+To set options 'set' command is used (syntax: "set OPT_NAME OPT_VALUE"):
+![stubborn_gui_set](https://user-images.githubusercontent.com/54325660/119639734-2db10300-be18-11eb-854e-bfe5aa13db65.png)
+
+If any option is set, its value is shown in 'options' screen:
+![stubborn_gui_options_set](https://user-images.githubusercontent.com/54325660/119639784-3acdf200-be18-11eb-9c6a-890d298522a5.png)
+
+After choosing module and setting choosen options values 'execute' is used to launch module:
+![stubborn_gui_exe](https://user-images.githubusercontent.com/54325660/119640401-dcedda00-be18-11eb-9508-316e7af79253.png)
+
+More help can be obtained with 'help' command:
+![stubborn_gui_help](https://user-images.githubusercontent.com/54325660/119639950-618c2880-be18-11eb-821e-cb84195c31e1.png)
 
 ## Requirements
 The main goal is to keep requirements as low as it is possible, so this list will be hopefuly shortened and stripped to the bone.
