@@ -6,11 +6,8 @@ import importlib
 from modules import *
 
 def get_modules_files_list():
-    modules_list = os.listdir('./modules')
-    for filename in modules_list: 
-        if '.py' not in filename: 
-            modules_list.remove(filename)
-    modules_list.remove("__init__.py")
+    modules_list = [element for element in os.listdir('./modules') if '.py' in element and not (element.startswith('\.') or element.startswith('__'))]
+    print(modules_list)
     return modules_list
 
 def get_modules_properties_list(modules_list):
