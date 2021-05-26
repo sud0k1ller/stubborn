@@ -36,6 +36,7 @@ Modules that are already tested:
 - add_user.py
 - setcap_suid_file.py
 - suid_binary.py
+- ssh_auth_keys.py
 
 Other modules can still work in unexpected way on distros other than Kali Linux. 
 
