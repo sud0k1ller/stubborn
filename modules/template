@@ -7,7 +7,5 @@
 #OPTION5,YES,DESCRIPTION
 #END
 
-def main(arguments): #arguments is an array
+def main(arguments):
 	pass
-
-main(arguments)
