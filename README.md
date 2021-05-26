@@ -13,6 +13,21 @@ Post exploitation is sadly underrated, especially at the beginning of cybersecur
 Creating this tool is my way of gaining some knowledge about Linux systems from administrators perspective, security mechanisms, building software from sources and automating tasks.
 
 ## Usage
+### stubborn_arg.py - version using argparser library
+----
+To check available modules, simply use '--list':
+![stubborn_1](https://user-images.githubusercontent.com/54325660/119622774-c12e0800-be07-11eb-8524-aff6ac41849f.png)
+
+After choosing module use '--info' to get brief module description and all used parameters:
+![stubborn_2](https://user-images.githubusercontent.com/54325660/119622804-c8551600-be07-11eb-8104-32cdc4d37789.png)
+
+To execute module use '--module module_name' with '--set OPT1=OPT_VALUE OPT2=OPT2_VALUE' and '--execute'. Hit ENTER and done!
+![stubborn_3](https://user-images.githubusercontent.com/54325660/119622816-cb500680-be07-11eb-82f8-c5d213dacf09.png)
+
+Generic help is available with '--help':
+![stubborn_help](https://user-images.githubusercontent.com/54325660/119622980-03574980-be08-11eb-8f7c-756143f0b2d7.png)
+
+### stubborn_gui.py - version using curses library
 ToDo
 
 ## Requirements
