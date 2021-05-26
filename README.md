@@ -28,7 +28,7 @@ Generic help is available with '--help':
 ![stubborn_help](https://user-images.githubusercontent.com/54325660/119622980-03574980-be08-11eb-8f7c-756143f0b2d7.png)
 
 ### stubborn_gui.py - version using curses library
-ToDo
+IMPORTANT! This version was made just for fun and was not tested on all distros and is not developed any more. 
 
 ## Requirements
 The main goal is to keep requirements as low as it is possible, so this list will be hopefuly shortened and stripped to the bone.
