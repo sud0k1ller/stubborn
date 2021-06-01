@@ -78,6 +78,7 @@ Modules that are already tested:
 - setcap_suid_file.py
 - suid_binary.py
 - ssh_auth_keys.py
+- timestamps_shuffle.py
 
 Other modules can still work in unexpected way on distros other than Kali Linux. 
 
